@@ -225,3 +225,49 @@
   </tbody>
 </table>
 //aqui termina listarequipos
+
+
+
+//recuperar de fechaCompra
+<label htmlFor="recipient-name" className="col-form-label">Fecha-Compra:</label>
+            <input 
+            type="text"
+            placeholder="Escribe un email"
+            className="form-control"
+            id="recipient-email17"
+            required
+            value={newEquipo.fechaCompra}
+            onChange={event => setNewEquipo({ fechaCompra: event.target.value,
+              serial: newEquipo.serial,
+              modelo: newEquipo.modelo,
+              descrip: newEquipo.descrip, foto: newEquipo.foto, color: newEquipo.color,
+              precio: newEquipo.precio, usuario: newEquipo.usuario,
+              marca: newEquipo.marca, estado: newEquipo.estado, equipo: newEquipo.equipo
+            })}
+            />
+
+            //newEditarinventario-FechaCompra
+
+            <label htmlFor="recipient-name" className="col-form-label">Fecha-Compra:</label>
+            <input 
+            type="text"
+            className="form-control"
+            id="recipient-name7"
+            
+            value={newEditarEquipo.fechaCompra==="" ? equipoRecuperado.fechaCompra : newEditarEquipo.fechaCompra}
+            name={equipoRecuperado.name}
+            onChange={event => setNewEditarEquipo({ 
+              fechaCompra: event.target.value==="" ? equipoRecuperado.fechaCompra : event.target.value,
+              serial: newEditarEquipo.serial==="" ? equipoRecuperado.serial : newEditarEquipo.serial,
+              modelo: newEditarEquipo.modelo==="" ? equipoRecuperado.modelo : newEditarEquipo.modelo,
+              descrip: newEditarEquipo.descrip==="" ? equipoRecuperado.descrip : newEditarEquipo.descrip,
+              foto: newEditarEquipo.foto==="" ? equipoRecuperado.foto : newEditarEquipo.foto,
+              color: newEditarEquipo.color==="" ? equipoRecuperado.color : newEditarEquipo.color,
+              precio: newEditarEquipo.precio==="" ? equipoRecuperado.precio : newEditarEquipo.precio,
+              
+              usuario: newEditarEquipo.usuario==="" ? equipoRecuperado.usuario : newEditarEquipo.usuario,
+              marca: newEditarEquipo.marca==="" ? equipoRecuperado.marca : newEditarEquipo.marca,
+              estado: newEditarEquipo.estado==="" ? equipoRecuperado.estado : newEditarEquipo.estado,
+              equipo: newEditarEquipo.equipo==="" ? equipoRecuperado.equipo : newEditarEquipo.equipo
+             })}
+            />

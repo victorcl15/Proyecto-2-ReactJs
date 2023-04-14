@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { getTipoEquipos, createTipoEquipo, editarTipoEquipo, eliminarTipoEquipo } from "../servicios/TipoEquipo";
 import "../styles/estilos.css"
 import Spinner from "./Utils/Spinner";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function Inventario() {
 
@@ -50,6 +52,12 @@ export default function Inventario() {
     descrip: "", foto: "", color: "", fechaCompra: "", precio: "", usuario: "",
     marca: "", estado: "", equipo: ""
        })
+    }
+
+    const handleKeyPress = (event) => {
+      if (isNaN(event.key)) {
+        event.preventDefault();
+      }
     }
 // listar inventarios
     const listarEquipos = async () => {
@@ -295,22 +303,21 @@ export default function Inventario() {
             />
           </div>
           <div className="col-auto" style={{  marginRight: "60px", marginTop: "40px", width: "30%"}}>
-            <label htmlFor="recipient-name" className="col-form-label">Fecha-Compra:</label>
-            <input 
-            type="text"
-            placeholder="Escribe un email"
-            className="form-control"
-            id="recipient-email17"
-            required
-            value={newEquipo.fechaCompra}
-            onChange={event => setNewEquipo({ fechaCompra: event.target.value,
+          <label htmlFor="recipient-name" className="col-form-label">Fecha-Compra:</label>
+            <DatePicker
+            className="form-select" aria-label="Default select example"
+            placeholderText="Seelecciona una fecha"
+            
+            selected={newEquipo.fechaCompra}
+            onChange={(date) =>  setNewEquipo({
+              fechaCompra: date,
               serial: newEquipo.serial,
               modelo: newEquipo.modelo,
               descrip: newEquipo.descrip, foto: newEquipo.foto, color: newEquipo.color,
               precio: newEquipo.precio, usuario: newEquipo.usuario,
               marca: newEquipo.marca, estado: newEquipo.estado, equipo: newEquipo.equipo
             })}
-            />
+            ></DatePicker>
           </div>
           <div className="col-auto" style={{  marginRight: "60px", marginTop: "40px", width: "30%"}}>
             <label htmlFor="recipient-name" className="col-form-label">Precio:</label>
@@ -321,13 +328,15 @@ export default function Inventario() {
             id="recipient-email18"
             required
             value={newEquipo.precio}
-            onChange={event => setNewEquipo({ precio: event.target.value, 
+            
+            onChange={event => isNaN(event.target.value) ? handleKeyPress : setNewEquipo({ precio: event.target.value, 
               serial: newEquipo.serial,
               modelo: newEquipo.modelo,
               descrip: newEquipo.descrip, foto: newEquipo.foto, color: newEquipo.color,
               fechaCompra: newEquipo.fechaCompra, usuario: newEquipo.usuario,
               marca: newEquipo.marca, estado: newEquipo.estado, equipo: newEquipo.equipo
             })}
+            
             />
           </div>
           <div className="col-auto" style={{  marginRight: "60px", marginTop: "40px", width: "30%"}}>
@@ -586,16 +595,15 @@ export default function Inventario() {
             />
           </div>
           <div className="col-auto" style={{  marginRight: "60px", marginTop: "40px", width: "30%"}}>
-            <label htmlFor="recipient-name" className="col-form-label">Fecha-Compra:</label>
-            <input 
-            type="text"
-            className="form-control"
-            id="recipient-name7"
+
+          <label htmlFor="recipient-name" className="col-form-label">Fecha-Compra:</label>
+            <DatePicker
+            className="form-select" aria-label="Default select example"
             
             value={newEditarEquipo.fechaCompra==="" ? equipoRecuperado.fechaCompra : newEditarEquipo.fechaCompra}
-            name={equipoRecuperado.name}
-            onChange={event => setNewEditarEquipo({ 
-              fechaCompra: event.target.value==="" ? equipoRecuperado.fechaCompra : event.target.value,
+            selected={newEditarEquipo.fechaCompra}
+            onChange={(date) =>  setNewEditarEquipo({
+              fechaCompra: date,
               serial: newEditarEquipo.serial==="" ? equipoRecuperado.serial : newEditarEquipo.serial,
               modelo: newEditarEquipo.modelo==="" ? equipoRecuperado.modelo : newEditarEquipo.modelo,
               descrip: newEditarEquipo.descrip==="" ? equipoRecuperado.descrip : newEditarEquipo.descrip,
@@ -607,8 +615,9 @@ export default function Inventario() {
               marca: newEditarEquipo.marca==="" ? equipoRecuperado.marca : newEditarEquipo.marca,
               estado: newEditarEquipo.estado==="" ? equipoRecuperado.estado : newEditarEquipo.estado,
               equipo: newEditarEquipo.equipo==="" ? equipoRecuperado.equipo : newEditarEquipo.equipo
-             })}
-            />
+            })}
+            ></DatePicker>
+            
           </div>
           <div className="col-auto" style={{  marginRight: "60px", marginTop: "40px", width: "30%"}}>
             <label htmlFor="recipient-name" className="col-form-label">Precio:</label>
@@ -619,7 +628,7 @@ export default function Inventario() {
             
             value={newEditarEquipo.precio==="" ? equipoRecuperado.precio : newEditarEquipo.precio}
             name={equipoRecuperado.name}
-            onChange={event => setNewEditarEquipo({ 
+            onChange={event => isNaN(event.target.value) ? handleKeyPress : setNewEditarEquipo({ 
               precio: event.target.value==="" ? equipoRecuperado.precio : event.target.value,
               serial: newEditarEquipo.serial==="" ? equipoRecuperado.serial : newEditarEquipo.serial,
               modelo: newEditarEquipo.modelo==="" ? equipoRecuperado.modelo : newEditarEquipo.modelo,
@@ -761,13 +770,14 @@ export default function Inventario() {
 
         { 
         loading ? 
-        (<button class="btn btn-primary" type="button" disabled>
-        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        (<button className="btn btn-primary" type="button" disabled>
+        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
         Loading...
       </button>) :
         (<button type="submit" disabled={(!newEditarEquipo.serial) || (!newEditarEquipo.modelo) || 
               (!newEditarEquipo.descrip) || (!newEditarEquipo.foto) || (!newEditarEquipo.color)
-              || (!newEditarEquipo.fechaCompra) || (!newEditarEquipo.precio) || (!newEditarEquipo.usuario) ||
+              || (!newEditarEquipo.fechaCompra && !isNaN(new Date(newEditarEquipo.fechaCompra).getTime())) 
+              || (!newEditarEquipo.precio) || (!newEditarEquipo.usuario) ||
               (!newEditarEquipo.marca) || (!newEditarEquipo.estado) || (!newEditarEquipo.equipo)} className="btn btn-primary" data-bs-dismiss="modal">Enviar</button>
         )}
       </div>
