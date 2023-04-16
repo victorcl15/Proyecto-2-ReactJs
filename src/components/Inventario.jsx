@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 //import {getAll} from "../servicios/equipos"
 import { getTipoEquipos, createTipoEquipo, editarTipoEquipo, eliminarTipoEquipo } from "../servicios/TipoEquipo";
+import moment, { isDate } from 'moment';
 import "../styles/estilos.css"
 import Spinner from "./Utils/Spinner";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+
+import dayjs from "dayjs";
 
 export default function Inventario() {
 
@@ -145,7 +148,7 @@ export default function Inventario() {
         serial: event.target.getAttribute("data-serial"), modelo: event.target.getAttribute("data-modelo"),
         descrip: event.target.getAttribute("data-descrip"), foto: event.target.getAttribute("data-foto"),
         color: event.target.getAttribute("data-color"),
-        fechaCompra: event.target.getAttribute("data-fechacompra"), precio: event.target.getAttribute("data-precio"), 
+        fechaCompra: dayjs(event.target.getAttribute("data-fechacompra")).add(0, "day").format("YYYY-MM-DD"), precio: event.target.getAttribute("data-precio"), 
         usuario: event.target.getAttribute("data-usuario"),
         marca: event.target.getAttribute("data-marca"), estado: event.target.getAttribute("data-estado"),
         equipo: event.target.getAttribute("data-equipo")
@@ -597,13 +600,14 @@ export default function Inventario() {
           <div className="col-auto" style={{  marginRight: "60px", marginTop: "40px", width: "30%"}}>
 
           <label htmlFor="recipient-name" className="col-form-label">Fecha-Compra:</label>
-            <DatePicker
-            className="form-select" aria-label="Default select example"
+            <input
+            type="date"
+            className="form-control"
             
-            value={newEditarEquipo.fechaCompra==="" ? equipoRecuperado.fechaCompra : newEditarEquipo.fechaCompra}
-            selected={newEditarEquipo.fechaCompra}
-            onChange={(date) =>  setNewEditarEquipo({
-              fechaCompra: date,
+            value={newEditarEquipo.fechaCompra==="" ? equipoRecuperado.fechaCompra : dayjs(newEditarEquipo.fechaCompra).format("YYYY-MM-DD")}
+            
+            onChange={event =>  setNewEditarEquipo({
+              fechaCompra: event.target.value==="" ? equipoRecuperado.fechaCompra : dayjs(event.target.value).add(0,"day"),
               serial: newEditarEquipo.serial==="" ? equipoRecuperado.serial : newEditarEquipo.serial,
               modelo: newEditarEquipo.modelo==="" ? equipoRecuperado.modelo : newEditarEquipo.modelo,
               descrip: newEditarEquipo.descrip==="" ? equipoRecuperado.descrip : newEditarEquipo.descrip,
@@ -616,7 +620,7 @@ export default function Inventario() {
               estado: newEditarEquipo.estado==="" ? equipoRecuperado.estado : newEditarEquipo.estado,
               equipo: newEditarEquipo.equipo==="" ? equipoRecuperado.equipo : newEditarEquipo.equipo
             })}
-            ></DatePicker>
+            ></input>
             
           </div>
           <div className="col-auto" style={{  marginRight: "60px", marginTop: "40px", width: "30%"}}>
@@ -776,10 +780,13 @@ export default function Inventario() {
       </button>) :
         (<button type="submit" disabled={(!newEditarEquipo.serial) || (!newEditarEquipo.modelo) || 
               (!newEditarEquipo.descrip) || (!newEditarEquipo.foto) || (!newEditarEquipo.color)
-              || (!newEditarEquipo.fechaCompra && !isNaN(new Date(newEditarEquipo.fechaCompra).getTime())) 
+              || ((!newEditarEquipo.fechaCompra) && isDate(newEditarEquipo.fechaCompra))
               || (!newEditarEquipo.precio) || (!newEditarEquipo.usuario) ||
               (!newEditarEquipo.marca) || (!newEditarEquipo.estado) || (!newEditarEquipo.equipo)} className="btn btn-primary" data-bs-dismiss="modal">Enviar</button>
-        )}
+              
+        )
+        //!isNaN(new Date(newEditarEquipo.fechaCompra).getTime())
+        }
       </div>
       
       
@@ -832,7 +839,7 @@ export default function Inventario() {
       <td>{tipoequipos.descrip}</td>
       <td>{tipoequipos.foto}</td>
       <td>{tipoequipos.color}</td>
-      <td>{tipoequipos.fechaCompra}</td>
+      <td>{dayjs(tipoequipos.fechaCompra).add(0, "day").format("YYYY-MM-DD")}</td>
       <td>{tipoequipos.precio}</td>
       <td>{tipoequipos.usuario.name}</td>
       <td>{tipoequipos.marca.name}</td>
